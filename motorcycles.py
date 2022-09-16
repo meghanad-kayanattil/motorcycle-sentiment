@@ -10,10 +10,10 @@ import psaw
 import datetime as dt
 import pandas as pd
 import random
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
-t = AutoTokenizer.from_pretrained("arpanghoshal/EmoRoBERTa")
-model = AutoModelForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa", from_tf=True)
 
+from transformers import AutoTokenizer, pipeline
+t = AutoTokenizer.from_pretrained("bhadresh-savani/bert-base-go-emotion")
+model = "bhadresh-savani/bert-base-go-emotion"
 
 class motorcycles:
 

@@ -65,7 +65,7 @@ def analyze():
 
     fig1 = Figure(figsize=(7,7))
     axis1 = fig1.add_subplot(1, 1, 1)
-    axis1.set_title("EmoRoBERTa model")
+    # axis1.set_title("EmoRoBERTa model")
     axis1.bar(senti_label, senti_count,alpha=0.5, color = colors)
     axis1.set_ylabel('Count')
     axis1.tick_params(axis='x', rotation=90)
