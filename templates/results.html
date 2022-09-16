@@ -13,10 +13,13 @@
                 <p>{{message}}</p>
             {% endfor %}
             {% for message in get_flashed_messages(category_filter=["2"])%}
+            <p style="color:blue;">{{message}}</p>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=["3"])%}
             <p>{{message}}</p>
-        {% endfor %}
+            {% endfor %}
+            <br>
             <img id="img1" src="{{ image1 }}"/>
-            <img id="img2" src="{{ image2 }}"/>
             <br>
             <br>
             <br>

@@ -12,12 +12,10 @@ import datetime as dt
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import nltk
-from nltk.sentiment import SentimentIntensityAnalyzer
 import random
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+from transformers import AutoTokenizer, TFAutoModelForSequenceClassification, pipeline
 t = AutoTokenizer.from_pretrained("arpanghoshal/EmoRoBERTa")
-model = AutoModelForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa",from_tf=True)
+model = TFAutoModelForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa")
 
 
 class motorcycles:
@@ -42,7 +40,7 @@ class motorcycles:
                                            limit=100000, before=current_epoch,
                                            after=old_epoch) # get all the texts and details
         except:
-            return [], [], [], [], [] # som time the psaw api outputs that the servers are down in that case we 
+            return [], [], [] # som time the psaw api outputs that the servers are down in that case we 
             # return null values so that the app.py can  accordingly handle errors
 
         comments_dict = {'Text': [], 'User ID': [], 'Score(upvotes-downvotes)': [],
@@ -58,27 +56,16 @@ class motorcycles:
 
         df = pd.DataFrame(comments_dict) # converting the dictionary into a dataframe
         df.drop_duplicates(subset=['Text'], keep='last', inplace=True) # removing duplicate comments
-
-        # Defining the nltk sentiment analyzer
-        sia = SentimentIntensityAnalyzer()
         all_comments = df.Text
 
         if len(all_comments) == 0: # sometimes the search string does not match exactly the name input
             # then we return null values so that the app.py can  accordingly handle errors
             print("No data found")
-            return [], [], [], [], []
+            return [], [], []
 
         rand_i = random.randint(0, len(all_comments))
         example_comment = all_comments[rand_i] # chosing a random comment to display later
-        
-        res = {}
-        for i, text in enumerate(all_comments):
-            res[i] = sia.polarity_scores(text)
-
-        polarity_df = pd.DataFrame(res).T # the results of the setiment analyzer
-        polarity_mean = pd.Series(polarity_df.mean())
-        error = pd.Series(polarity_df.std())
-        return polarity_mean, error, example_comment, len(all_comments), all_comments
+        return example_comment, len(all_comments), all_comments
 
 def analysis_huggingface(all_comments):    
     short_comments = []
@@ -101,5 +88,5 @@ def analysis_huggingface(all_comments):
 # subred_name = 'motorcycle'
 # current, begenning = hf.time_frame_calculator('Last 1 year')
 # moto = motorcycles(bikename, subred_name, current, begenning)
-# _,_,_,_,all_comm = moto.get_comments()
+# _,_,all_comm = moto.get_comments()
 # analysis_huggingface(all_comm)
