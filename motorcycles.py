@@ -8,7 +8,6 @@ Created on Wed Aug  3 10:39:25 2022
 
 import psaw
 import datetime as dt
-import pandas as pd
 import random
 
 from transformers import AutoTokenizer, pipeline
@@ -40,16 +39,16 @@ class motorcycles:
             return [], [], [] # som time the psaw api outputs that the servers are down in that case we 
             # return null values so that the app.py can  accordingly handle errors
 
-        comments_dict = {'Text': [], 'User ID': [], 'Score(upvotes-downvotes)': [],
-                         'Date of the comment': []} 
+        comments_dict = {'Text': []}  #, 'User ID': [], 'Score(upvotes-downvotes)': [],
+                         # 'Date of the comment': []} 
 
         for comment in comments: # converting the scraped data into a dictionary
             date = dt.datetime.fromtimestamp(comment.created_utc)
             if self.name in comment.body:
                 comments_dict['Text'].append(comment.body)
-                comments_dict['User ID'].append(comment.id)
-                comments_dict['Score(upvotes-downvotes)'].append(comment.score)
-                comments_dict['Date of the comment'].append(date)
+                #comments_dict['User ID'].append(comment.id)
+                #comments_dict['Score(upvotes-downvotes)'].append(comment.score)
+                #comments_dict['Date of the comment'].append(date)
 
         # df = pd.DataFrame(comments_dict) # converting the dictionary into a dataframe
         # df.drop_duplicates(subset=['Text'], keep='last', inplace=True) # removing duplicate comments
@@ -72,18 +71,24 @@ def analysis_huggingface(all_comments):
         
     classifier = pipeline('sentiment-analysis', model,  tokenizer=t)
     results = classifier(short_comments)
-    sentiment = pd.DataFrame(results)
-    sentiment_label = sentiment.label.value_counts()[:10].index.tolist()
-    sentiment_count = sentiment.label.value_counts()[:10].tolist()
-    print(short_comments[2])
+    labels = []
+    for r in results:
+        labels.append(r['label'])
+    counts = {i:labels.count(i) for i in labels}
+    sentiment_label = counts.keys()
+    sentiment_count = counts.values()
+    #print(short_comments[2])
+    #print(sentiment_count)
     return sentiment_label, sentiment_count
 
 # %% 
 #  TEST
+#import helper_functions as hf
+#bikename = 'interceptor'
+#subred_name = 'motorcycle'
+#current, begenning = hf.time_frame_calculator('Last 1 year')
+#moto = motorcycles(bikename, subred_name, current, begenning)
+#_,_,all_comm = moto.get_comments()
+#analysis_huggingface(all_comm)
 
-# bikename = 'interceptor'
-# subred_name = 'motorcycle'
-# current, begenning = hf.time_frame_calculator('Last 1 year')
-# moto = motorcycles(bikename, subred_name, current, begenning)
-# _,_,all_comm = moto.get_comments()
-# analysis_huggingface(all_comm)
+# %%

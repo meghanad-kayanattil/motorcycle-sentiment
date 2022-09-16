@@ -1,6 +1,4 @@
 import datetime as dt
-
-
 def time_frame_calculator(timeframe):
     timeframe_defenitions = ['Last 30 days', 'Last 6 months', 'Last 1 year',
                              'Last 2 years', 'Last 3 years', 'Last 4 years', 'Last 5 years']

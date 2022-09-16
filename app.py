@@ -59,8 +59,8 @@ def analyze():
     flash(str(example_comment), "3")
     # Generate plot
     cmap = matplotlib.cm.get_cmap('hsv')
-    colors = np.zeros([10,4])
-    for i in range(10):
+    colors = np.zeros([15,4])
+    for i in range(15):
         colors[i,:] = cmap(i*0.1)
 
     fig1 = Figure(figsize=(7,7))
