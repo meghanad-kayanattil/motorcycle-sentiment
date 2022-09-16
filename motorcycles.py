@@ -6,16 +6,13 @@ Created on Wed Aug  3 10:39:25 2022
 @author: meghanadkayanattil
 """
 
-import helper_functions as hf
 import psaw
 import datetime as dt
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import random
-from transformers import AutoTokenizer, TFAutoModelForSequenceClassification, pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 t = AutoTokenizer.from_pretrained("arpanghoshal/EmoRoBERTa")
-model = TFAutoModelForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa")
+model = AutoModelForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa", from_tf=True)
 
 
 class motorcycles:
