@@ -6,3 +6,6 @@ psaw==0.1.0
 tensorflow==2.9.2
 transformers==4.21.3
 gunicorn==20.1.0
+datetime
+io
+base64
