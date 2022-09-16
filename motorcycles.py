@@ -51,9 +51,9 @@ class motorcycles:
                 comments_dict['Score(upvotes-downvotes)'].append(comment.score)
                 comments_dict['Date of the comment'].append(date)
 
-        df = pd.DataFrame(comments_dict) # converting the dictionary into a dataframe
-        df.drop_duplicates(subset=['Text'], keep='last', inplace=True) # removing duplicate comments
-        all_comments = df.Text
+        # df = pd.DataFrame(comments_dict) # converting the dictionary into a dataframe
+        # df.drop_duplicates(subset=['Text'], keep='last', inplace=True) # removing duplicate comments
+        all_comments = comments_dict["Text"] # df.Text
 
         if len(all_comments) == 0: # sometimes the search string does not match exactly the name input
             # then we return null values so that the app.py can  accordingly handle errors
@@ -66,7 +66,7 @@ class motorcycles:
 
 def analysis_huggingface(all_comments):    
     short_comments = []
-    for comment in all_comments.to_list():
+    for comment in all_comments:
         if len(comment)<512:
             short_comments.append(comment)
         
