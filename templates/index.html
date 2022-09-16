@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Motorcycle seniment analysis</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    </head>
+    <body>
+        <br>
+        <form action="Input" method="post">
+            {% for message in get_flashed_messages(category_filter=["1"])%}
+                <p>{{message}}</p>
+            {% endfor %}
+            <input type="text" name="name_input">
+            <br>
+            {% for message in get_flashed_messages(category_filter=["2"])%}
+                <p>{{message}}</p>
+            {% endfor %}
+            <select name=subreds method="GET" action="Subred_input">
+                {% for subred in subreds %}
+                <option value= "{{subred}}" SELECTED>{{subred}}</option>"
+                {% endfor %}
+            </select>
+            <br>
+            {% for message in get_flashed_messages(category_filter=["3"])%}
+                <p>{{message}}</p>
+            {% endfor %}
+            <select name=timeframe method="GET" action="time_frame">
+                {% for frame in timeframe %}
+                <option value= "{{frame}}" SELECTED>{{frame}}</option>"
+                {% endfor %}
+            </select>
+            <br>
+            <br>
+            <br>
+            <input type="submit" value="Input" id="Input">
+        </form> 
+
+        <div class="cookie-container">
+            <p>
+                This app lets you determine the general sentiment regarding 
+                a desired bike by retriving comments mentioning the bike name you entered available on varius 
+                subreddits. The application uses natural language processing models to
+                assess the sentiments. 
+            </p>
+        </div>
+    </body>
+</html>

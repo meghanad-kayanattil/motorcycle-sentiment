@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Motorcycle seniment analysis</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    </head>
+    <body>
+        <br>
+        <form action="Analyze" method="post">
+            {% for message in get_flashed_messages(category_filter=["1"])%}
+                <p>Sentiment for</p> <p style="color:blue;">{{message}}</p>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=["2"])%}
+                <p>In</p> <p style="color:blue;">{{message}}</p>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=["4"])%}
+                <p>Between</p> <p style="color:blue;">{{message}}</p>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=["3"])%}
+                <p>{{message}}</p>
+            {% endfor %}
+            <br><input type="submit" value="Analyze" id="Analyze">
+        </form> 
+        <br>
+        <form action="home" method="post">
+            <p>OR</p>
+            <input type="submit" value="Take me back" id="home">
+        </form>
+
+    </body>
+</html>

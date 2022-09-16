@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Motorcycle seniment analysis</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    </head>
+    <body>
+        <br>
+        <form action="home" method="post">
+            {% for message in get_flashed_messages(category_filter=["1"])%}
+                <p>{{message}}</p>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=["2"])%}
+            <p>{{message}}</p>
+        {% endfor %}
+            <img id="img1" src="{{ image1 }}"/>
+            <img id="img2" src="{{ image2 }}"/>
+            <br>
+            <br>
+            <br>
+            <input type="submit" value="Try another" id="home">
+        </form> 
+    </body>
+</html>
