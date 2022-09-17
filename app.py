@@ -36,11 +36,10 @@ def input():
     moto = motorcycles.motorcycles(bikename, subred_name, current, begenning)
     global example_comment
     global len_comments
-
-    example_comment, len_comments,all_comments = moto.get_comments()
-
     global senti_label
     global senti_count
+    
+    example_comment, len_comments,all_comments = moto.get_comments()
     senti_label, senti_count = motorcycles.analysis_huggingface(all_comments)
 
     if len(all_comments) == 0:
@@ -50,6 +49,7 @@ def input():
         flash(str(request.form.get('subreds')), "2")
         flash('Please confirm and proceed for data retrival and analysis by pressing on the \'Analyze\' button', "3")
         flash(str(current)+' and '+str(begenning), "4")
+        del all_comments
         return render_template("display.html")
 
 @app.route("/Analyze", methods=["POST", "GET"])

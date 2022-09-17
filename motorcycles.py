@@ -15,8 +15,6 @@ t = AutoTokenizer.from_pretrained("bhadresh-savani/bert-base-go-emotion")
 model = "bhadresh-savani/bert-base-go-emotion"
 
 class motorcycles:
-
-    global all_comments 
     
     def __init__(self, name, subred, begenning, ending):
         self.name = name
@@ -49,11 +47,11 @@ class motorcycles:
                 #comments_dict['User ID'].append(comment.id)
                 #comments_dict['Score(upvotes-downvotes)'].append(comment.score)
                 #comments_dict['Date of the comment'].append(date)
-
+        del comments
         # df = pd.DataFrame(comments_dict) # converting the dictionary into a dataframe
         # df.drop_duplicates(subset=['Text'], keep='last', inplace=True) # removing duplicate comments
         all_comments = comments_dict["Text"] # df.Text
-
+        del comments_dict
         if len(all_comments) == 0: # sometimes the search string does not match exactly the name input
             # then we return null values so that the app.py can  accordingly handle errors
             print("No data found")
@@ -68,13 +66,14 @@ def analysis_huggingface(all_comments):
     for comment in all_comments:
         if len(comment)<512:
             short_comments.append(comment)
-        
+    del all_comments
     classifier = pipeline('sentiment-analysis', model,  tokenizer=t)
     results = classifier(short_comments)
     labels = []
     for r in results:
         labels.append(r['label'])
     counts = {i:labels.count(i) for i in labels}
+    del labels
     sentiment_label = counts.keys()
     sentiment_count = counts.values()
     #print(short_comments[2])
