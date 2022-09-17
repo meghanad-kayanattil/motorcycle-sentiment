@@ -13,72 +13,35 @@ import random
 from transformers import AutoTokenizer, pipeline
 t = AutoTokenizer.from_pretrained("bhadresh-savani/bert-base-go-emotion")
 model = "bhadresh-savani/bert-base-go-emotion"
+classifier = pipeline('sentiment-analysis', model,  tokenizer=t)
 
-class motorcycles:
-    
-    def __init__(self, name, subred, begenning, ending):
-        self.name = name
-        self.subred = subred
-        self.begenning = begenning
-        self.ending = ending
+def get_comments_and_analyze(name, subred, begenning, ending):
 
-    def get_comments(self):
-        # Using the psaw api to get comments containing the string 'self.name'
-        api = psaw.PushshiftAPI()
-        current_epoch = int(dt.datetime(
-            self.begenning.year, self.begenning.month, self.begenning.day).timestamp()) # time stamp creation of the current day
-        old_epoch = int(dt.datetime(self.ending.year,
-                        self.ending.month, self.ending.day).timestamp()) # time stamp creation of the ending day
-        try:
-            comments = api.search_comments(q=self.name, subreddit=self.subred,
+    # Using the psaw api to get comments containing the string 'self.name'
+    api = psaw.PushshiftAPI()
+    current_epoch = int(dt.datetime(begenning.year, begenning.month, begenning.day).timestamp()) # time stamp creation of the current day
+    old_epoch = int(dt.datetime(ending.year, ending.month, ending.day).timestamp()) # time stamp creation of the ending day
+    try:
+        comments = api.search_comments(q=name, subreddit=subred,
                                            limit=100000, before=current_epoch,
                                            after=old_epoch) # get all the texts and details
-        except:
-            return [], [], [] # som time the psaw api outputs that the servers are down in that case we 
+        labels = []
+        counter = 0
+        for comment in comments:
+            if name in comment.body and len(comment.body)<512:
+                result = classifier(comment.body)
+                labels.append(result[0]['label'])
+                example_comment = comment.body
+            counter += 1
+
+        counts = {i:labels.count(i) for i in labels}
+        sentiment_label = counts.keys()
+        sentiment_count = counts.values()
+
+        return example_comment, counter, sentiment_label, sentiment_count 
+    except:
+        return [], [], [], [] # som time the psaw api outputs that the servers are down in that case we 
             # return null values so that the app.py can  accordingly handle errors
-
-        comments_dict = {'Text': []}  #, 'User ID': [], 'Score(upvotes-downvotes)': [],
-                         # 'Date of the comment': []} 
-
-        for comment in comments: # converting the scraped data into a dictionary
-            date = dt.datetime.fromtimestamp(comment.created_utc)
-            if self.name in comment.body:
-                comments_dict['Text'].append(comment.body)
-                #comments_dict['User ID'].append(comment.id)
-                #comments_dict['Score(upvotes-downvotes)'].append(comment.score)
-                #comments_dict['Date of the comment'].append(date)
-        del comments
-        # df = pd.DataFrame(comments_dict) # converting the dictionary into a dataframe
-        # df.drop_duplicates(subset=['Text'], keep='last', inplace=True) # removing duplicate comments
-        all_comments = comments_dict["Text"] # df.Text
-        del comments_dict
-        if len(all_comments) == 0: # sometimes the search string does not match exactly the name input
-            # then we return null values so that the app.py can  accordingly handle errors
-            print("No data found")
-            return [], [], []
-
-        rand_i = random.randint(0, len(all_comments))
-        example_comment = all_comments[rand_i] # chosing a random comment to display later
-        return example_comment, len(all_comments), all_comments
-
-def analysis_huggingface(all_comments):    
-    short_comments = []
-    for comment in all_comments:
-        if len(comment)<512:
-            short_comments.append(comment)
-    del all_comments
-    classifier = pipeline('sentiment-analysis', model,  tokenizer=t)
-    results = classifier(short_comments)
-    labels = []
-    for r in results:
-        labels.append(r['label'])
-    counts = {i:labels.count(i) for i in labels}
-    del labels
-    sentiment_label = counts.keys()
-    sentiment_count = counts.values()
-    #print(short_comments[2])
-    #print(sentiment_count)
-    return sentiment_label, sentiment_count
 
 # %% 
 #  TEST
@@ -86,8 +49,6 @@ def analysis_huggingface(all_comments):
 #bikename = 'interceptor'
 #subred_name = 'motorcycle'
 #current, begenning = hf.time_frame_calculator('Last 1 year')
-#moto = motorcycles(bikename, subred_name, current, begenning)
-#_,_,all_comm = moto.get_comments()
-#analysis_huggingface(all_comm)
-
+#_,_,_,senti = get_comments(bikename, subred_name, current, begenning)
+#print(senti)
 # %%

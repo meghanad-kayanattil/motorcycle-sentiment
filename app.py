@@ -28,34 +28,34 @@ def index():
 def input():
     if request.form['name_input']=='':
         return redirect(url_for('index'))
+
     global bikename
+
     bikename = str(request.form['name_input'])
     subred_name = str(request.form.get('subreds'))[2:]
     timeframe = request.form.get('timeframe')
     current, begenning = hf.time_frame_calculator(timeframe) 
-    moto = motorcycles.motorcycles(bikename, subred_name, current, begenning)
+     
     global example_comment
     global len_comments
     global senti_label
     global senti_count
     
-    example_comment, len_comments,all_comments = moto.get_comments()
-    senti_label, senti_count = motorcycles.analysis_huggingface(all_comments)
+    example_comment, len_comments, senti_label, senti_count= motorcycles.get_comments_and_analyze(bikename, subred_name, current, begenning)
 
-    if len(all_comments) == 0:
+    if len(senti_label) == 0:
         return redirect(url_for("no_data"))
     else:
         flash(str(request.form['name_input']), "1")
         flash(str(request.form.get('subreds')), "2")
         flash('Please confirm and proceed for data retrival and analysis by pressing on the \'Analyze\' button', "3")
         flash(str(current)+' and '+str(begenning), "4")
-        del all_comments
         return render_template("display.html")
 
 @app.route("/Analyze", methods=["POST", "GET"])
 def analyze():
     flash("The sentiment for "+str(bikename)+" is as shown by anlyzing "+str(len_comments)+" available comments", "1")
-    flash("One such comment chosen randomly: ", "2")
+    flash("One such comment: ", "2")
     flash(str(example_comment), "3")
     # Generate plot
     cmap = matplotlib.cm.get_cmap('hsv')
