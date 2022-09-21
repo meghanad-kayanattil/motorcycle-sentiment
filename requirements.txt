@@ -2,7 +2,7 @@ Flask==2.2.2
 matplotlib==3.5.3
 numpy==1.22.4
 psaw==0.1.0
-torch==1.11.0
+tensorflow_cpu
 transformers==4.21.3
 gunicorn==20.1.0
 datetime

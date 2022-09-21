@@ -9,10 +9,10 @@ Created on Wed Aug  3 10:39:25 2022
 import psaw
 import datetime as dt
 import random
-
 from transformers import AutoTokenizer, pipeline
-t = AutoTokenizer.from_pretrained("bhadresh-savani/bert-base-go-emotion")
-model = "bhadresh-savani/bert-base-go-emotion"
+t = AutoTokenizer.from_pretrained("arpanghoshal/EmoRoBERTa")
+
+model = "arpanghoshal/EmoRoBERTa"
 classifier = pipeline('sentiment-analysis', model,  tokenizer=t)
 
 def get_comments_and_analyze(name, subred, begenning, ending):
@@ -26,19 +26,23 @@ def get_comments_and_analyze(name, subred, begenning, ending):
                                            limit=100000, before=current_epoch,
                                            after=old_epoch) # get all the texts and details
         labels = []
-        counter = 0
+        all_comments = []
+   
         for comment in comments:
-            if name in comment.body and len(comment.body)<512:
+            if (len(comment.body)<512) and ((name in comment.body) or (name.lower() in comment.body)): 
                 result = classifier(comment.body)
                 labels.append(result[0]['label'])
-                example_comment = comment.body
-            counter += 1
+                all_comments.append(comment.body)
+            
 
         counts = {i:labels.count(i) for i in labels}
         sentiment_label = counts.keys()
         sentiment_count = counts.values()
+        len_coms = len(all_comments)
+        rand_i = random.randint(0, len_coms)
+        example_comment = all_comments[rand_i]
 
-        return example_comment, counter, sentiment_label, sentiment_count 
+        return example_comment, len_coms, sentiment_label, sentiment_count 
     except:
         return [], [], [], [] # som time the psaw api outputs that the servers are down in that case we 
             # return null values so that the app.py can  accordingly handle errors
