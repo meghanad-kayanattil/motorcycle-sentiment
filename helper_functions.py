@@ -1,5 +1,8 @@
 import datetime as dt
 def time_frame_calculator(timeframe):
+    """
+    convering user input of search interval to date for the main function
+    """
     timeframe_defenitions = ['Last 30 days', 'Last 6 months', 'Last 1 year',
                              'Last 2 years', 'Last 3 years', 'Last 4 years', 'Last 5 years']
     days_to_subtract = [30, 160, 365, 365*2, 365*3, 365*4, 365*5]

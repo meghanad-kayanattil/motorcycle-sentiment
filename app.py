@@ -81,6 +81,7 @@ def analyze():
 
     return render_template("results.html", image1=pngImageB64String1)
 
+# error handling 
 @app.route('/no_data', methods=["POST", "GET"])
 def no_data():
     return render_template("no_data.html")

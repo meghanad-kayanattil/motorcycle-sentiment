@@ -16,6 +16,18 @@ model = "arpanghoshal/EmoRoBERTa"
 classifier = pipeline('sentiment-analysis', model,  tokenizer=t)
 
 def get_comments_and_analyze(name, subred, begenning, ending):
+    """
+    App uses psaw api to get comments and other information on the target subred containing the phrases input by the user
+
+    Input: name - target motorcycle in this case
+           subred - target subred in this case
+           begenning - current date to do the search
+           ending - date till the search needs to be done
+    Output: - a randomly chosen example comment
+            - number of comments containing the motorcycle name
+            - labbel of sentiment, depends on the NLP model
+            - counts of sentiment associated with the label 
+    """
 
     # Using the psaw api to get comments containing the string 'self.name'
     api = psaw.PushshiftAPI()
@@ -29,7 +41,8 @@ def get_comments_and_analyze(name, subred, begenning, ending):
         all_comments = []
    
         for comment in comments:
-            if (len(comment.body)<512) and ((name in comment.body) or (name.lower() in comment.body)): 
+            if (len(comment.body)<512) and ((name in comment.body) or (name.lower() in comment.body)): #making sure that the comment contains the ey word, 512 restriction
+                # is part of the model
                 result = classifier(comment.body)
                 labels.append(result[0]['label'])
                 all_comments.append(comment.body)
