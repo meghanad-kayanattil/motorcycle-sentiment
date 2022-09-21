@@ -14,7 +14,7 @@ All of this process is implementad in the backend of the webapp using the popula
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/meghanad-kayanattil/motorcycle-sentiment/blob/main/summary.jpg)
 
 
 ## Run Locally
@@ -22,16 +22,18 @@ All of this process is implementad in the backend of the webapp using the popula
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/meghanad-kayanattil/motorcycle-sentiment
 ```
 
 Go to the project directory
 
 
 
-Install dependencies
+Create a virtual env and Install dependencies
 
 ```bash
+  conda create --name virt_env
+  conda activate virt_env
   pip install -r requirements.txt
 ```
 
@@ -40,5 +42,5 @@ Start the server
 ```bash
   flask run
 ```
-Go to the default port displayed in your terminal and add a "/home" to the end of the weblink
+Go to the default port displayed in your terminal and add a "/home" to the end of the weblink. You now have the app running in your system locally!
 
